@@ -127,7 +127,7 @@ h1 { margin-top: 20px; color: #d46a6a; }
   top: 100px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 10px 15px;
+  padding: 12px 18px;
   background: #ff7f7f;
   color: #fff;
   border-radius: 10px;
@@ -141,6 +141,8 @@ h1 { margin-top: 20px; color: #d46a6a; }
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;
+  font-family: 'Arial', 'Comic Sans MS', cursive;
+  line-height: 1.4;
 }
 
 /* Mobile Controls */
@@ -222,10 +224,12 @@ h1 { margin-top: 20px; color: #d46a6a; }
   }
   
   .speech-bubble {
-    font-size: 14px !important;
-    max-width: 90vw;
+    font-size: 16px !important;
+    max-width: 85vw;
     white-space: normal;
     text-align: center;
-    word-break: break-word;
+    word-break: keep-all;
+    top: 80px !important;
+    transform: translateX(-50%) scale(0.9);
   }
 }

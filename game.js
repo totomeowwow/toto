@@ -166,10 +166,10 @@ function spawnTreat(timestamp) {
     game.appendChild(el);
     treats.push({ el, y: 0, type: item.type });
 
-    // SPECIAL MODE DIFFICULTY
-    speed = 2 + score * 0.03;
-    spawnRate = Math.max(400, 1500 - score * 12);
-    bombChance = Math.min(0.4, 0.1 + score * 0.0015);
+    // ENDLESS MODE DIFFICULTY
+    speed = 2 + Math.floor(score / 10) * 0.5;
+    spawnRate = Math.max(300, 1500 - score * 10);
+    bombChance = Math.min(0.5, 0.1 + score * 0.002);
   }
 }
 
@@ -188,9 +188,8 @@ function loop(timestamp) {
         score++;
         scoreDisplay.textContent = `Score: ${score}`;
 
-        // SPECIAL MODE WIN CONDITION
         if (score >= 51) {
-          window.location.href = 'meow.html';
+          window.location.href = 'meow.html'; // Redirect to meow.html
         }
 
         eatSound.play();
@@ -271,8 +270,20 @@ mobileMusicBtn.addEventListener("click", toggleMusic);
 game.addEventListener("touchstart", handleTouchStart, false);
 game.addEventListener("touchend", handleTouchEnd, false);
 
-pauseBtn.onclick = () => { paused = true; pauseOverlay.style.display = 'flex'; };
-resumeBtn.onclick = () => { paused = false; pauseOverlay.style.display = 'none'; };
+// Pause and resume game with music controls
+pauseBtn.onclick = () => { 
+  paused = true; 
+  pauseOverlay.style.display = 'flex'; 
+  music.pause(); // Added music pause
+};
+
+resumeBtn.onclick = () => { 
+  paused = false; 
+  pauseOverlay.style.display = 'none'; 
+  if (!music.paused) return;
+  music.play(); // Added music resume
+};
+
 restartBtn.onclick = () => location.reload();
 menuBtn.onclick = () => window.location.href = 'index.html';
 

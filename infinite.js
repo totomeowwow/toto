@@ -266,8 +266,20 @@ mobileMusicBtn.addEventListener("click", toggleMusic);
 game.addEventListener("touchstart", handleTouchStart, false);
 game.addEventListener("touchend", handleTouchEnd, false);
 
-pauseBtn.onclick = () => { paused = true; pauseOverlay.style.display = 'flex'; };
-resumeBtn.onclick = () => { paused = false; pauseOverlay.style.display = 'none'; };
+// Pause and resume game with music controls
+pauseBtn.onclick = () => { 
+  paused = true; 
+  pauseOverlay.style.display = 'flex'; 
+  music.pause(); // Added music pause
+};
+
+resumeBtn.onclick = () => { 
+  paused = false; 
+  pauseOverlay.style.display = 'none'; 
+  if (!music.paused) return;
+  music.play(); // Added music resume
+};
+
 restartBtn.onclick = () => location.reload();
 menuBtn.onclick = () => window.location.href = 'index.html';
 
