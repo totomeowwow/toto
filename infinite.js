@@ -1,4 +1,5 @@
-document.getElementById("cat");
+// Game variables
+const cat = document.getElementById("cat");
 const game = document.getElementById("game");
 const scoreDisplay = document.getElementById("score");
 const overlay = document.getElementById("game-over-overlay");
@@ -10,19 +11,17 @@ const resumeBtn = document.getElementById("resume-btn");
 const restartBtn = document.getElementById("restart-btn");
 const menuBtn = document.getElementById("menu-btn");
 
-// Create a music element and load the song
-const music = new Audio('music.mp3'); // Replace with your music file path
-music.loop = true; // Loop the music indefinitely
+// Audio elements
+const music = new Audio('music.mp3');
+music.loop = true;
+const eatSound = new Audio('nom.mp3');
+const dieSound = new Audio('oof.mp3');
 
-// Sound effects for eating and dying
-const eatSound = new Audio('nom.mp3'); // Replace with your eating sound file path
-const dieSound = new Audio('oof.mp3'); // Replace with your dying sound file path
-
+// Game state
 let score = 0;
 let catPos = 1;
 let gameOver = false;
 let paused = false;
-
 let speed = 2;
 let spawnRate = 1500;
 let bombChance = 0.1;
@@ -30,7 +29,7 @@ const lanePercents = [15, 50, 85];
 const treats = [];
 let lastSpawn = 0;
 
-// Array of random messages
+// Messages
 const messages = [
   "Mmm, fish is yummy!",
   "Catch me if you can!",
@@ -40,10 +39,10 @@ const messages = [
   "I'm purrfect at this!",
   "Gotcha!",
   "I love catching treats!",
-  "I’m the purrfect catcher!",
+  "I'm the purrfect catcher!",
   "Mmm, sushi time!",
-  "I’m too fast for these bombs!",
-  "I’m a treat magnet!",
+  "I'm too fast for these bombs!",
+  "I'm a treat magnet!",
   "Catching fish is pawsome!",
   "Toto, you should kiss Dodo right now!",
   "My whiskers are sensing Toto's gonna flash Dodo.",
@@ -52,20 +51,46 @@ const messages = [
   "¡Miau, miau, nom nom!",
   "I'm a snack attack!",
   "Sushi, here I come!",
-  "I’m the fastest cat in the world!",
+  "I'm the fastest cat in the world!",
   "By the way, Dodo loves you toto!",
   "I'm pregnant!",
   "Me love treat!"
 ];
 
-// Shuffle utility
+// Shuffle messages
+let shuffledMessages = shuffleArray([...messages]);
+let messageIndex = 0;
+
+// Speech bubble
+const speechBubble = document.createElement("div");
+speechBubble.classList.add("speech-bubble");
+game.appendChild(speechBubble);
+let canShowMessage = true;
+
+// Mobile controls
+const mobileControls = document.createElement("div");
+mobileControls.id = "mobile-controls";
+mobileControls.innerHTML = `
+  <button id="mobile-left">←</button>
+  <button id="mobile-right">→</button>
+`;
+document.body.appendChild(mobileControls);
+
+const mobileLeft = document.getElementById("mobile-left");
+const mobileRight = document.getElementById("mobile-right");
+const mobileMusicBtn = document.createElement("button");
+mobileMusicBtn.id = "mobile-music-btn";
+mobileMusicBtn.textContent = "🔊";
+document.body.appendChild(mobileMusicBtn);
+
+// Touch controls
+let touchStartX = 0;
+let touchEndX = 0;
+
+// Functions
 function shuffleArray(arr) {
   return arr.sort(() => Math.random() - 0.5);
 }
-
-// Initialize shuffled messages
-let shuffledMessages = shuffleArray([...messages]);
-let messageIndex = 0;
 
 function getNextMessage() {
   const message = shuffledMessages[messageIndex++];
@@ -76,34 +101,36 @@ function getNextMessage() {
   return message;
 }
 
-// Create a speech bubble element
-const speechBubble = document.createElement("div");
-speechBubble.classList.add("speech-bubble");
-game.appendChild(speechBubble);
-
-// Variable to track cooldown
-let canShowMessage = true;
-
-window.addEventListener("keydown", e => {
-  if (gameOver || paused) return;
-
-  if ((e.key === "ArrowLeft" || e.key === "a") && catPos > 0) catPos--;
-  if ((e.key === "ArrowRight" || e.key === "d") && catPos < 2) catPos++;
-  if (e.key === "r") location.reload();
-  if (e.key === "m") toggleMusic(); // Toggle music when "M" is pressed
-
-  cat.className = `lane-${catPos}`;
-});
-
 function toggleMusic() {
   if (music.paused) {
     music.play();
+    mobileMusicBtn.textContent = "🔊";
   } else {
     music.pause();
+    mobileMusicBtn.textContent = "🔇";
   }
 }
 
-function spawnTreatSpecial(timestamp) {
+function handleTouchStart(e) {
+  touchStartX = e.changedTouches[0].screenX;
+}
+
+function handleTouchEnd(e) {
+  if (gameOver || paused) return;
+  
+  touchEndX = e.changedTouches[0].screenX;
+  const diffX = touchStartX - touchEndX;
+  
+  if (diffX > 50 && catPos < 2) {
+    catPos++;
+  } else if (diffX < -50 && catPos > 0) {
+    catPos--;
+  }
+  
+  cat.className = `lane-${catPos}`;
+}
+
+function spawnTreat(timestamp) {
   if (timestamp - lastSpawn > spawnRate) {
     lastSpawn = timestamp;
     const item = Math.random() < bombChance
@@ -119,16 +146,17 @@ function spawnTreatSpecial(timestamp) {
     game.appendChild(el);
     treats.push({ el, y: 0, type: item.type });
 
-    speed = 2 + score * 0.05;
-    spawnRate = Math.max(500, 1500 - score * 15);
-    bombChance = Math.min(0.9, 0.1 + score * 0.005);
+    // Increase difficulty as score increases (ENDLESS MODE SPECIFIC)
+    speed = 2 + Math.floor(score / 10) * 0.5;
+    spawnRate = Math.max(300, 1500 - score * 10);
+    bombChance = Math.min(0.5, 0.1 + score * 0.002);
   }
 }
 
-function loopSpecial(timestamp) {
+function loop(timestamp) {
   if (gameOver) return;
   if (!paused) {
-    spawnTreatSpecial(timestamp);
+    spawnTreat(timestamp);
     treats.forEach((t, i) => {
       t.y += speed;
       t.el.style.top = `${t.y}px`;
@@ -136,21 +164,17 @@ function loopSpecial(timestamp) {
       const rectC = cat.getBoundingClientRect();
       if (rectT.bottom >= rectC.top && rectT.left < rectC.right && rectT.right > rectC.left) {
         clearTreat(i);
-        if (t.type === "bad") return endGame(); // ends game if a bomb is caught
+        if (t.type === "bad") return endGame();
         score++;
         scoreDisplay.textContent = `Score: ${score}`;
 
-        // Play sound when cat eats something good
         eatSound.play();
 
-        // Show speech bubble with shuffled message
         if (canShowMessage) {
           canShowMessage = false;
-
           const message = getNextMessage();
           speechBubble.textContent = message;
           speechBubble.style.display = "block";
-
           const catRect = cat.getBoundingClientRect();
           speechBubble.style.left = `${catRect.left + catRect.width / 2 - speechBubble.offsetWidth / 2}px`;
           speechBubble.style.top = `${catRect.top - 170}px`;
@@ -170,9 +194,8 @@ function loopSpecial(timestamp) {
       }
     });
   }
-  requestAnimationFrame(loopSpecial);
+  requestAnimationFrame(loop);
 }
-requestAnimationFrame(loopSpecial);
 
 function clearTreat(index) {
   treats[index].el.remove();
@@ -189,14 +212,39 @@ function endGame() {
   deathGif.style.display = 'none';
   restartText.style.display = 'block';
 
-  // Play the die sound and stop the music
   dieSound.play();
-  music.pause(); // Pause music when game ends
+  music.pause();
 
   overlay.onclick = () => {
-    location.reload(); // Reload the page to start a new game
+    location.reload();
   };
 }
+
+// Event listeners
+window.addEventListener("keydown", e => {
+  if (gameOver || paused) return;
+
+  if ((e.key === "ArrowLeft" || e.key === "a") && catPos > 0) catPos--;
+  if ((e.key === "ArrowRight" || e.key === "d") && catPos < 2) catPos++;
+  if (e.key === "r") location.reload();
+  if (e.key === "m") toggleMusic();
+
+  cat.className = `lane-${catPos}`;
+});
+
+mobileLeft.addEventListener("click", () => {
+  if (catPos > 0) catPos--;
+  cat.className = `lane-${catPos}`;
+});
+
+mobileRight.addEventListener("click", () => {
+  if (catPos < 2) catPos++;
+  cat.className = `lane-${catPos}`;
+});
+
+mobileMusicBtn.addEventListener("click", toggleMusic);
+game.addEventListener("touchstart", handleTouchStart, false);
+game.addEventListener("touchend", handleTouchEnd, false);
 
 pauseBtn.onclick = () => { paused = true; pauseOverlay.style.display = 'flex'; };
 resumeBtn.onclick = () => { paused = false; pauseOverlay.style.display = 'none'; };
@@ -210,6 +258,8 @@ instructions.style.position = "absolute";
 instructions.style.top = "10px";
 instructions.style.left = "10px";
 instructions.style.fontSize = "16px";
-instructions.style.color = "#333"; // Darker gray color
+instructions.style.color = "#333";
 game.appendChild(instructions);
 
+// Start game
+requestAnimationFrame(loop);

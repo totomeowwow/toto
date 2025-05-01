@@ -127,6 +127,69 @@ h1 { margin-top: 20px; color: #d46a6a; }
   display: none;
   font-size: 18px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  opacity: 1; /* Start with full opacity */
-  transition: opacity 4s ease-out; /* Slower fade out effect */
+  opacity: 1;
+  transition: opacity 4s ease-out;
+}
+
+/* Mobile Controls */
+#mobile-controls {
+  display: none;
+  width: 100%;
+  justify-content: space-between;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+#mobile-controls button {
+  padding: 15px 25px;
+  font-size: 24px;
+  background: #ff7f7f;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  margin: 0 10px;
+}
+
+#mobile-music-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px;
+  background: #ff7f7f;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+  z-index: 100;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #mobile-controls {
+    display: flex;
+  }
+  
+  #game {
+    height: 60vh;
+  }
+  
+  #cat {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .falling {
+    font-size: 30px !important;
+  }
+  
+  #score {
+    font-size: 24px;
+  }
+  
+  #pause-btn {
+    font-size: 16px;
+    padding: 6px 10px;
+  }
 }
