@@ -335,3 +335,14 @@ document.querySelectorAll('button').forEach(button => {
 
 // Start game
 requestAnimationFrame(loop);
+
+// Menu Button to navigate to index.html
+menuBtn.onclick = () => {
+  location.href = "index.html"; // This will redirect to the index.html page (Main Menu)
+};
+
+// Restart Button to refresh the game
+restartBtn.onclick = () => {
+  location.reload(); // This will reload the page and restart the game
+};
+
