@@ -81,24 +81,27 @@ const mobileRight = document.getElementById("mobile-right");
 const mobileMusicBtn = document.createElement("button");
 mobileMusicBtn.id = "mobile-music-btn";
 mobileMusicBtn.textContent = music.paused ? "🔇" : "🔊";
+mobileMusicBtn.setAttribute("aria-label", "Toggle music");
 document.body.appendChild(mobileMusicBtn);
 
 // Position music button
-mobileMusicBtn.style.position = "fixed";
-mobileMusicBtn.style.bottom = "25px";
-mobileMusicBtn.style.left = "25px";
-mobileMusicBtn.style.width = "60px";
-mobileMusicBtn.style.height = "60px";
-mobileMusicBtn.style.borderRadius = "50%";
-mobileMusicBtn.style.fontSize = "24px";
-mobileMusicBtn.style.zIndex = "100";
-mobileMusicBtn.style.display = "flex";
-mobileMusicBtn.style.alignItems = "center";
-mobileMusicBtn.style.justifyContent = "center";
-mobileMusicBtn.style.backgroundColor = "#ff7f7f";
-mobileMusicBtn.style.color = "white";
-mobileMusicBtn.style.border = "none";
-mobileMusicBtn.style.cursor = "pointer";
+Object.assign(mobileMusicBtn.style, {
+  position: "fixed",
+  top: "10px",
+  left: "10px",
+  width: "40px",
+  height: "40px",
+  borderRadius: "50%",
+  fontSize: "18px",
+  zIndex: "100",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  backgroundColor: "#ff7f7f",
+  color: "white",
+  border: "none",
+  cursor: "pointer"
+});
 
 // Touch controls
 let touchStartX = 0;
@@ -268,15 +271,31 @@ resumeBtn.onclick = () => { paused = false; pauseOverlay.style.display = 'none';
 restartBtn.onclick = () => location.reload();
 menuBtn.onclick = () => window.location.href = 'index.html';
 
-// Add instruction for "M" and "R" to top left corner
+// Add instruction for "M" and "R" to top left corner (hidden on mobile)
 const instructions = document.createElement("div");
 instructions.textContent = "Press 'M' to toggle music, 'R' to reset the game.";
-instructions.style.position = "absolute";
-instructions.style.top = "10px";
-instructions.style.left = "10px";
-instructions.style.fontSize = "16px";
-instructions.style.color = "#333";
+Object.assign(instructions.style, {
+  position: "absolute",
+  top: "10px",
+  left: "60px",
+  fontSize: "16px",
+  color: "#333"
+});
 game.appendChild(instructions);
+
+if (window.innerWidth <= 768) {
+  instructions.style.display = "none";
+}
+
+// Prevent zoom on double-tap
+document.addEventListener('dblclick', function(e) {
+  e.preventDefault();
+}, { passive: false });
+
+// Add this to all buttons to prevent tap highlight
+document.querySelectorAll('button').forEach(button => {
+  button.style.webkitTapHighlightColor = 'transparent';
+});
 
 // Start game
 requestAnimationFrame(loop);
