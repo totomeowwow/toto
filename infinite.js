@@ -29,16 +29,6 @@ const lanePercents = [15, 50, 85];
 const treats = [];
 let lastSpawn = 0;
 
-// Music state
-let musicWasPlaying = false;
-const musicMuted = localStorage.getItem('musicMuted') === 'true';
-if (!musicMuted) {
-  music.play().catch(() => {});
-  mobileMusicBtn.textContent = "🔊";
-} else {
-  mobileMusicBtn.textContent = "🔇";
-}
-
 // Messages
 const messages = [
   "Mmm, fish is yummy!",
@@ -135,11 +125,9 @@ function toggleMusic() {
   if (music.paused) {
     music.play();
     mobileMusicBtn.textContent = "🔊";
-    localStorage.setItem('musicMuted', 'false');
   } else {
     music.pause();
     mobileMusicBtn.textContent = "🔇";
-    localStorage.setItem('musicMuted', 'true');
   }
 }
 
@@ -252,6 +240,33 @@ function endGame() {
   };
 }
 
+// Global variable to store music state (paused or playing)
+let isMusicPaused = false;
+
+// Pause and resume game with music controls
+pauseBtn.onclick = () => { 
+  paused = true; 
+  pauseOverlay.style.display = 'flex'; 
+  // Store the music state before pausing
+  isMusicPaused = music.paused;
+  music.pause(); // Pause the music
+};
+
+resumeBtn.onclick = () => { 
+  paused = false; 
+  pauseOverlay.style.display = 'none'; 
+  // Resume music based on the stored state
+  if (!isMusicPaused) {
+    music.play();
+    mobileMusicBtn.textContent = "🔊";
+  } else {
+    music.pause();
+    mobileMusicBtn.textContent = "🔇";
+  }
+};
+
+mobileMusicBtn.addEventListener("click", toggleMusic);
+
 // Event listeners
 window.addEventListener("keydown", e => {
   if (gameOver || paused) return;
@@ -277,24 +292,6 @@ mobileRight.addEventListener("click", () => {
 mobileMusicBtn.addEventListener("click", toggleMusic);
 game.addEventListener("touchstart", handleTouchStart, false);
 game.addEventListener("touchend", handleTouchEnd, false);
-
-// Pause and resume game with music controls
-pauseBtn.onclick = () => { 
-  paused = true; 
-  pauseOverlay.style.display = 'flex'; 
-  musicWasPlaying = !music.paused;
-  if (musicWasPlaying) music.pause();
-};
-
-resumeBtn.onclick = () => { 
-  paused = false; 
-  pauseOverlay.style.display = 'none'; 
-  if (musicWasPlaying && !music.paused) return;
-  if (musicWasPlaying) music.play();
-};
-
-restartBtn.onclick = () => location.reload();
-menuBtn.onclick = () => window.location.href = 'index.html';
 
 // Add instruction for "M" and "R" to top left corner (hidden on mobile)
 const instructions = document.createElement("div");
