@@ -4,24 +4,91 @@
   <meta charset="UTF-8" />
   <title>Meow 🎉</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+
+    #win-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-color: rgba(20, 18, 17, 0.95); /* dark cozy overlay */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      color: #fbeee6;
+      z-index: 9999;
+      cursor: pointer;
+    }
+
+    #main-content {
+      display: none;
+      text-align: center;
+      padding: 40px;
+      background-color: #fffdf7; /* light background */
+      color: #000;
+    }
+
+    h1 {
+      color: #ff66a5;
+    }
+
+    p {
+      font-size: 1.1em;
+      line-height: 1.6;
+    }
+
+    .toto-img {
+      max-width: 90%;
+      margin-top: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(255, 153, 170, 0.3);
+    }
+  </style>
 </head>
 <body class="birthday">
-  <h1>🎂 Happy Birthday Toto! 🎉</h1>
-  <p>You caught all the treats! Kosa is happy now, just like how I'm happy that you're here by my side.<br>Every single day that passes by, as you're growing older, I love you beyond infinity and I always will. ❤️</p>
-  <img src="kosahappy.png" alt="Happy Kosa!" class="toto-img" style="width: 780px;">
-  
-  <!-- Audio with autoplay and muted for compatibility -->
-  <audio id="bg-music" autoplay loop muted>
-    <source src="mecat.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+  <!-- Dark overlay -->
+  <div id="win-overlay">
+    <div>😸 Kosa is fed! 🐟</div>
+    <div style="font-size: 0.6em; margin-top: 10px;">(click anywhere to continue)</div>
+  </div>
 
-  <!-- JavaScript to unmute audio after the user clicks -->
+  <!-- Light theme surprise -->
+  <div id="main-content">
+    <h1>🎂 Happy Birthday Toto! 🎉</h1>
+    <p>
+      You caught all the treats! Kosa is happy now, just like how I'm happy that you're here by my side.<br>
+      Every single day that passes by, as you're growing older, I love you beyond infinity and I always will. ❤️
+    </p>
+    <img src="kosahappy.png" alt="Happy Kosa!" class="toto-img">
+    <audio id="bg-music" autoplay loop muted>
+      <source src="meow.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+    <!-- Added click sound effect -->
+    <audio id="click-sound" preload="auto">
+      <source src="click.mp3" type="audio/mpeg" />
+    </audio>
+  </div>
+
   <script>
+    const overlay = document.getElementById("win-overlay");
+    const content = document.getElementById("main-content");
     const music = document.getElementById("bg-music");
+    const clickSound = document.getElementById("click-sound");
 
-    // Unmute music on first click
-    window.addEventListener("click", () => {
+    overlay.addEventListener("click", () => {
+      // Play click sound
+      clickSound.currentTime = 0; // Rewind to start if already playing
+      clickSound.play().catch(e => console.log("Click sound error:", e));
+      
+      // Original functionality
+      overlay.style.display = "none";
+      content.style.display = "block";
       music.muted = false;
       music.play();
     });
