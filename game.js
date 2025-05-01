@@ -219,13 +219,7 @@ function loop(timestamp) {
   }
 
   if (score >= goalScore) {
-    gameOver = true;
-    overlay.style.display = 'flex';
-    deathGif.style.display = 'none';
-    restartText.style.display = 'block';
-    scoreDisplay.textContent = `You Win! Score: ${score}`;
-    dieSound.play();
-    music.pause();
+     window.location.href = "meow.html";
   }
 
   requestAnimationFrame(loop);
