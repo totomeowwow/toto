@@ -80,8 +80,24 @@ const mobileLeft = document.getElementById("mobile-left");
 const mobileRight = document.getElementById("mobile-right");
 const mobileMusicBtn = document.createElement("button");
 mobileMusicBtn.id = "mobile-music-btn";
-mobileMusicBtn.textContent = "🔊";
+mobileMusicBtn.textContent = music.paused ? "🔇" : "🔊";
 document.body.appendChild(mobileMusicBtn);
+
+// Position music button
+mobileMusicBtn.style.position = "fixed";
+mobileMusicBtn.style.bottom = "25px";
+mobileMusicBtn.style.left = "25px";
+mobileMusicBtn.style.width = "60px";
+mobileMusicBtn.style.height = "60px";
+mobileMusicBtn.style.borderRadius = "50%";
+mobileMusicBtn.style.fontSize = "24px";
+mobileMusicBtn.style.zIndex = "100";
+mobileMusicBtn.style.display = "flex";
+mobileMusicBtn.style.alignItems = "center";
+mobileMusicBtn.style.justifyContent = "center";
+mobileMusicBtn.style.backgroundColor = "#ff7f7f";
+mobileMusicBtn.style.color = "white";
+mobileMusicBtn.style.border = "none";
 
 // Touch controls
 let touchStartX = 0;
@@ -146,7 +162,7 @@ function spawnTreat(timestamp) {
     game.appendChild(el);
     treats.push({ el, y: 0, type: item.type });
 
-    // Increase difficulty as score increases (ENDLESS MODE SPECIFIC)
+    // ENDLESS MODE DIFFICULTY
     speed = 2 + Math.floor(score / 10) * 0.5;
     spawnRate = Math.max(300, 1500 - score * 10);
     bombChance = Math.min(0.5, 0.1 + score * 0.002);
@@ -224,10 +240,10 @@ function endGame() {
 window.addEventListener("keydown", e => {
   if (gameOver || paused) return;
 
-  if ((e.key === "ArrowLeft" || e.key === "a") && catPos > 0) catPos--;
-  if ((e.key === "ArrowRight" || e.key === "d") && catPos < 2) catPos++;
-  if (e.key === "r") location.reload();
-  if (e.key === "m") toggleMusic();
+  if ((e.key === "ArrowLeft" || e.key === "a" || e.key === "A") && catPos > 0) catPos--;
+  if ((e.key === "ArrowRight" || e.key === "d" || e.key === "D") && catPos < 2) catPos++;
+  if (e.key === "r" || e.key === "R") location.reload();
+  if (e.key === "m" || e.key === "M") toggleMusic();
 
   cat.className = `lane-${catPos}`;
 });
