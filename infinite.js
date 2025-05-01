@@ -98,6 +98,7 @@ mobileMusicBtn.style.justifyContent = "center";
 mobileMusicBtn.style.backgroundColor = "#ff7f7f";
 mobileMusicBtn.style.color = "white";
 mobileMusicBtn.style.border = "none";
+mobileMusicBtn.style.cursor = "pointer";
 
 // Touch controls
 let touchStartX = 0;
