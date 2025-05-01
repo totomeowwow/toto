@@ -52,7 +52,7 @@ const messages = [
   "I'm a snack attack!",
   "Sushi, here I come!",
   "I'm the fastest cat in the world!",
-  "By the way, Dodo loves you toto!",
+  "By the way, Dodo loves you so much Toto!",
   "I'm pregnant!",
   "Me love treat!"
 ];
