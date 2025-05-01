@@ -29,6 +29,16 @@ const lanePercents = [15, 50, 85];
 const treats = [];
 let lastSpawn = 0;
 
+// Music state
+let musicWasPlaying = false;
+const musicMuted = localStorage.getItem('musicMuted') === 'true';
+if (!musicMuted) {
+  music.play().catch(() => {});
+  mobileMusicBtn.textContent = "🔊";
+} else {
+  mobileMusicBtn.textContent = "🔇";
+}
+
 // Messages
 const messages = [
   "Mmm, fish is yummy!",
@@ -125,9 +135,11 @@ function toggleMusic() {
   if (music.paused) {
     music.play();
     mobileMusicBtn.textContent = "🔊";
+    localStorage.setItem('musicMuted', 'false');
   } else {
     music.pause();
     mobileMusicBtn.textContent = "🔇";
+    localStorage.setItem('musicMuted', 'true');
   }
 }
 
@@ -270,14 +282,15 @@ game.addEventListener("touchend", handleTouchEnd, false);
 pauseBtn.onclick = () => { 
   paused = true; 
   pauseOverlay.style.display = 'flex'; 
-  music.pause(); // Added music pause
+  musicWasPlaying = !music.paused;
+  if (musicWasPlaying) music.pause();
 };
 
 resumeBtn.onclick = () => { 
   paused = false; 
   pauseOverlay.style.display = 'none'; 
-  if (!music.paused) return;
-  music.play(); // Added music resume
+  if (musicWasPlaying && !music.paused) return;
+  if (musicWasPlaying) music.play();
 };
 
 restartBtn.onclick = () => location.reload();

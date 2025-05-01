@@ -232,4 +232,14 @@ h1 { margin-top: 20px; color: #d46a6a; }
     top: 80px !important;
     transform: translateX(-50%) scale(0.9);
   }
+  
+  .speech-bubble {
+    white-space: normal !important;
+    word-break: break-word;
+    left: 10px !important;
+    right: 10px;
+    max-width: calc(100% - 20px) !important;
+    transform: translateX(0) !important;
+    text-align: center;
+  }
 }
