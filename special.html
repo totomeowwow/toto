@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Special Mode</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    h1 {
+      font-size: 48px;
+      color: #333; /* Default color for text */
+      text-align: center;
+    }
+
+    h1 span {
+      color: #ff66b2; /* Softer pink that's easier on the eyes */
+    }
+  </style>
+</head>
+<body>
+  <h1>🐱 Catch treats for Kosa <span>(Special Mode)</span></h1>
+  <div id="game">
+    <button id="pause-btn">⏸️</button>
+    <div id="cat" class="lane-1"></div>
+  </div>
+  <p id="score">Score: 0</p>
+  <p id="status"></p>
+
+  <!-- Game Over Overlay -->
+  <div id="game-over-overlay" class="overlay">
+    <!-- Game Over text -->
+    <p class="game-over-text" style="font-size:64px; color:#fff; margin:0;">Game Over!</p>
+    <!-- Death GIF plays first -->
+    <img id="death-gif" src="kosabye.gif" alt="Death Animation" style="display:none; max-width:200px; margin:20px 0; border-radius: 20px;">
+    <!-- Restart text appears after GIF -->
+    <p id="restart-text" class="restart-text" style="display:none; font-size:24px; color:#ddd; margin-top:10px;">
+      (Click anywhere to restart)
+    </p>
+  </div>
+
+  <!-- Pause Menu Overlay -->
+  <div id="pause-overlay" class="overlay">
+    <div class="menu-box">
+      <button id="resume-btn">Continue</button>
+      <button id="restart-btn">Restart</button>
+      <button id="menu-btn">Main Menu</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kosa Krsha</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #fff8e1; /* Very light pastel yellow */
+      color: #333; /* Dark gray text for readability */
+      font-family: 'Arial', 'Comic Sans MS', cursive, sans-serif; /* More reliable fallback fonts */
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      font-size: 72px;
+      margin-bottom: 40px;
+      color: #ff4081; /* Pink for "THE GAME" */
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 span {
+      color: #333; /* Dark gray for "KOSA" */
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      width: 320px;
+    }
+
+    .menu button {
+      font-size: 26px;
+      padding: 16px;
+      background: #fff; /* White background for buttons */
+      color: #333; /* Dark gray text for buttons */
+      border: 2px solid #ccc; /* Soft gray border */
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .menu button:hover {
+      background: #f0f0f0; /* Light gray hover effect */
+      transform: scale(1.05);
+    }
+
+    .menu button:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1><span>KOSA KRSHA</span><br>THE GAME</h1>
+
+  <div class="menu">
+    <button onclick="location.href='infinite.html'">🎮 Endless Mode</button>
+    <button onclick="location.href='special.html'">💛 Special Mode</button>
+    <button onclick="alert('🐟 Catch treats and avoid bombs!\n\nInfinite Mode: Endless fun!\nSpecial Mode: Toto Special Mode!\n\nIf you\'re reading this, then you\'re the most beautiful woman to ever exist!')">ℹ️ Info</button>
+  </div>
+
+</body>
+</html>
